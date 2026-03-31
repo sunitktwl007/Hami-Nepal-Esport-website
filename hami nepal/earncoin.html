@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn Center | Hami Nepal Esports</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #de1118;
+            --secondary: #00a6ff;
+            --bg-deep: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.07);
+            --success: #00ff88;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg-deep);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(222, 17, 24, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 166, 255, 0.05) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        /* --- PRO NAVBAR --- */
+        .navbar {
+            padding: 15px 5%;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent);
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 1.4rem; letter-spacing: 2px; text-decoration: none; color: #fff; }
+        .logo span { color: var(--accent); }
+
+        /* --- MAIN LAYOUT --- */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 320px;
+            gap: 25px;
+            padding: 30px 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            height: fit-content;
+            backdrop-filter: blur(5px);
+        }
+
+        .panel-title {
+            font-family: 'Orbitron';
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- PROFILE PANEL (LEFT) --- */
+        .user-card { text-align: center; margin-bottom: 30px; }
+        .avatar-glow {
+            width: 100px; height: 100px;
+            background: #111;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(222, 17, 24, 0.3);
+        }
+        .xp-bar {
+            width: 100%; height: 6px; background: #222;
+            border-radius: 10px; margin: 10px 0; overflow: hidden;
+        }
+        .xp-fill { width: 65%; height: 100%; background: var(--accent); }
+
+        /* --- QUEST CARDS (CENTER) --- */
+        .center-hub { display: flex; flex-direction: column; gap: 20px; }
+        
+        .promo-banner {
+            background: linear-gradient(90deg, #111, #222);
+            padding: 30px; border-radius: 15px; border-left: 5px solid var(--accent);
+            position: relative; overflow: hidden;
+        }
+        .promo-banner h1 { font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 5px; }
+
+        .quest-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 80px 1fr 180px;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .quest-card:hover { 
+            background: rgba(255,255,255,0.05); 
+            border-color: var(--secondary);
+            transform: scale(1.01);
+        }
+
+        .icon-box {
+            width: 60px; height: 60px;
+            background: #000; border: 1px solid #333;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .quest-content h3 { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 5px; }
+        .quest-content p { color: #888; font-size: 0.9rem; }
+
+        .reward-info { text-align: right; }
+        .reward-amt { 
+            display: block; font-family: 'Orbitron'; 
+            color: var(--success); font-size: 1.2rem; font-weight: 900; 
+        }
+
+        .action-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: var(--accent);
+            border: none; color: #fff;
+            font-family: 'Orbitron'; font-weight: 700;
+            cursor: pointer; border-radius: 4px;
+            width: 100%; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        }
+
+        /* --- SIDEBAR ACTIVITY (RIGHT) --- */
+        .activity-item {
+            display: flex; gap: 12px; margin-bottom: 15px;
+            padding-bottom: 15px; border-bottom: 1px solid #111;
+        }
+        .activity-item img { width: 35px; height: 35px; border-radius: 50%; }
+        .activity-text { font-size: 0.85rem; }
+        .activity-text b { color: var(--secondary); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .panel-side { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">HAMI <span>NEPAL</span></a>
+        <div style="display: flex; gap: 30px; font-family: Orbitron; font-size: 0.8rem;">
+            <div style="color: gold;"><i class="fas fa-coins"></i> <span id="balance">5240</span> HC</div>
+            <div style="color: var(--secondary);"><i class="fas fa-gem"></i> 0 DIAMONDS</div>
+        </div>
+    </nav>
+
+    <main class="main-grid">
+        
+        <aside class="panel panel-side">
+            <div class="user-card">
+                <div class="avatar-glow">
+                    <i class="fas fa-user-ninja" style="font-size: 3rem; color: #555;"></i>
+                </div>
+                <h2 style="font-family: Orbitron;">Survivor_HN</h2>
+                <p style="color: #666; font-size: 0.8rem; letter-spacing: 2px;">LVL 12 ELITE</p>
+                <div class="xp-bar"><div class="xp-fill"></div></div>
+                <p style="font-size: 0.7rem; color: #444;">1250 / 2000 XP TO NEXT LEVEL</p>
+            </div>
+
+            <h3 class="panel-title"><i class="fas fa-award"></i> Achievements</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div style="background:#111; padding:10px; border-radius:5px; text-align:center;" title="First Prediction"><i class="fas fa-check-circle" style="color: var(--success);"></i></div>
+                <div style="background:#111; padding:10px; border-radius:5px; text-align:center; opacity:0.3;"><i class="fas fa-fire"></i></div>
+                <div style="background:#111; padding:10px; border-radius:5px; text-align:center; opacity:0.3;"><i class="fas fa-crown"></i></div>
+            </div>
+        </aside>
+
+        <section class="center-hub">
+            <div class="promo-banner">
+                <h1>MISSION CENTER</h1>
+                <p style="color: #888;">Complete high-priority tasks to earn Hami-Coins for your next top-up.</p>
+            </div>
+
+            <div class="quest-card">
+                <div class="icon-box"><i class="fas fa-play" style="color: var(--secondary);"></i></div>
+                <div class="quest-content">
+                    <h3>Sponsor Broadcast</h3>
+                    <p>Watch a short video to support our guild prize pool.</p>
+                </div>
+                <div class="reward-info">
+                    <span class="reward-amt">+10 HC</span>
+                    <button class="action-btn" onclick="rewardAd()">START</button>
+                </div>
+            </div>
+
+            <div class="quest-card">
+                <div class="icon-box"><i class="fab fa-tiktok"></i></div>
+                <div class="quest-content">
+                    <h3>Social Recon</h3>
+                    <p>Follow @haminepal on TikTok for daily FF clips.</p>
+                </div>
+                <div class="reward-info">
+                    <span class="reward-amt">+10 HC</span>
+                    <button class="action-btn" style="background: var(--secondary);" onclick="tiktokFollow()">FOLLOW</button>
+                </div>
+            </div>
+
+            <div class="quest-card">
+                <div class="icon-box"><i class="fab fa-whatsapp" style="color: #25d366;"></i></div>
+                <div class="quest-content">
+                    <h3>Intel Channel</h3>
+                    <p>Join our WhatsApp for instant match notifications.</p>
+                </div>
+                <div class="reward-info">
+                    <span class="reward-amt">+5 HC</span>
+                    <button class="action-btn" style="background: #25d366;">JOIN</button>
+                </div>
+            </div>
+
+            <div class="quest-card">
+                <div class="icon-box"><i class="fab fa-instagram" style="color: #e1306c;"></i></div>
+                <div class="quest-content">
+                    <h3>Guild Gallery</h3>
+                    <p>Follow us on Instagram for tournament highlights.</p>
+                </div>
+                <div class="reward-info">
+                    <span class="reward-amt">+10 HC</span>
+                    <button class="action-btn" style="background: #e1306c;">FOLLOW</button>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel panel-side">
+            <h3 class="panel-title"><i class="fas fa-rss"></i> Live Activity</h3>
+            
+            <div class="activity-item">
+                <div style="width:35px; height:35px; background: #222; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">K</div>
+                <div class="activity-text">
+                    <b>Kancha_FF</b> just claimed 10 HC from Sponsor Ad.
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div style="width:35px; height:35px; background: #222; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">S</div>
+                <div class="activity-text">
+                    <b>Sammy_HN</b> followed on TikTok.
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div style="width:35px; height:35px; background: #222; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem;">G</div>
+                <div class="activity-text">
+                    <b>Gorkhali</b> earned 100 HC (Referral Bonus).
+                </div>
+            </div>
+
+            <div style="background: rgba(0, 166, 255, 0.05); border: 1px dashed var(--secondary); padding: 15px; border-radius: 10px; margin-top: 30px;">
+                <h4 style="font-family: Orbitron; font-size: 0.8rem; margin-bottom: 5px;">Exchange Rate</h4>
+                <p style="font-size: 0.9rem; color: #aaa;">100 HC = 10 <i class="fas fa-gem" style="color: var(--secondary); font-size: 0.7rem;"></i></p>
+            </div>
+        </aside>
+
+    </main>
+
+    <script>
+        function rewardAd() {
+            alert("Sponsor Ad is loading... Stay tuned for 10 HC!");
+            setTimeout(() => {
+                alert("SUCCESS! 10 Hami-Coins have been added to your vault.");
+            }, 3000);
+        }
+
+        function tiktokFollow() {
+            window.open('https://www.tiktok.com/@haminepal', '_blank');
+            alert("Verification started. Please stay followed for 24 hours to keep your reward!");
+        }
+    </script>
+</body>
+</html>

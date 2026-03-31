@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal eSports | Professional Gaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon-red: #ff003c;
+            --deep-black: #050505;
+            --glass-white: rgba(255, 255, 255, 0.05);
+            --accent-gold: #ffb400;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--deep-black);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Progress Bar --- */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 4px;
+            background: var(--neon-red);
+            z-index: 9999;
+            width: 0%;
+            box-shadow: 0 0 15px var(--neon-red);
+        }
+
+        /* --- Section Styling --- */
+        section {
+            min-height: 100vh;
+            padding: 100px 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Centers all content */
+        }
+
+        /* --- REVISED HERO SECTION --- */
+        .hero {
+            text-align: center;
+            background: radial-gradient(circle at center, #1a050a 0%, #050505 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-logo-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .main-logo {
+            width: 320px; /* Increased Size */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 60, 0.4));
+            animation: hero-pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes hero-pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 20px var(--neon-red)); 
+                transform: scale(1); 
+            }
+            50% { 
+                filter: drop-shadow(0 0 50px var(--neon-red)); 
+                transform: scale(1.08); 
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5.5rem; /* Larger Title */
+            margin: 0;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff 40%, #555);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .hero-subtitle {
+            letter-spacing: 8px; 
+            color: var(--neon-red);
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- Mission Section --- */
+        .mission {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1500') center/cover;
+            background-attachment: fixed;
+        }
+
+        .mission-content {
+            max-width: 900px;
+            text-align: center;
+            border-top: 2px solid var(--neon-red);
+            border-bottom: 2px solid var(--neon-red);
+            padding: 60px 20px;
+        }
+
+        /* --- Council / Founders --- */
+        .founders { background: #080808; }
+        
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .founder-card {
+            position: relative;
+            height: 500px;
+            background: #111;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.5s;
+        }
+
+        .founder-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .founder-info {
+            position: absolute;
+            bottom: -110px;
+            left: 0;
+            width: 100%;
+            padding: 40px 25px;
+            background: linear-gradient(transparent, #000 70%);
+            transition: 0.5s;
+        }
+
+        .founder-card:hover { border-color: var(--neon-red); box-shadow: 0 0 30px rgba(255, 0, 60, 0.2); }
+        .founder-card:hover img { opacity: 1; transform: scale(1.15); }
+        .founder-card:hover .founder-info { bottom: 0; }
+
+        .founder-info h4 { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: #fff; }
+        .founder-info span { color: var(--neon-red); font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 10px; }
+
+        /* --- Scroll Animation --- */
+        .reveal { opacity: 0; transform: translateY(60px); transition: 1.2s all ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        footer {
+            padding: 60px;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+
+    <section class="hero">
+        <div class="main-logo-container">
+            <img src="sammyam.png" alt="Hami Nepal Logo" class="main-logo">
+        </div>
+        <div class="reveal">
+            <h1>HAMI NEPAL</h1>
+            <p class="hero-subtitle">The Pinnacle of Free Fire eSports</p>
+        </div>
+    </section>
+
+    <section class="mission">
+        <div class="mission-content reveal">
+            <h2 style="font-family:'Orbitron'; font-size: 2.5rem; margin-bottom: 20px;">OUR LEGACY</h2>
+            <p style="font-size: 1.3rem; line-height: 1.8; color: #bbb;">
+                Hami Nepal eSports emerged from the heart of the Nepali gaming community with a single mission: 
+                to transform raw passion into professional dominance. We represent the next generation of 
+                cyber-athletes, blending precision strategy with the relentless spirit of the Himalayas.
+            </p>
+        </div>
+    </section>
+
+    <section class="founders">
+        <h2 style="font-family:'Orbitron'; font-size: 3rem; margin-bottom: 60px;">THE FOUNDING COUNCIL</h2>
+        <div class="leadership-grid">
+            
+            <div class="founder-card reveal">
+                <img src="IMG_0101.PNG" alt="Sammaym">
+                <div class="founder-info">
+                    <span>CHIEF EXECUTIVE</span>
+                    <h4>Sammaym Katuwal</h4>
+                    <p>The architect of Hami Nepal's expansion and strategic vision.</p>
+                </div>
+            </div>
+
+            <div class="founder-card reveal">
+                <img src="sulabh.PNG" alt="Sulabh">
+                <div class="founder-info">
+                    <span>TACTICAL DIRECTOR</span>
+                    <h4>Sulabh Podel</h4>
+                    <p>In-game specialist focused on championship-level rotations.</p>
+                </div>
+            </div>
+
+            <div class="founder-card reveal">
+                <img src="manas.PNG" alt="Manas">
+                <div class="founder-info">
+                    <span>OPERATIONS HEAD</span>
+                    <h4>Manas Tamang</h4>
+                    <p>Ensuring the squad operates at peak performance 24/7.</p>
+                </div>
+            </div>
+
+            <div class="founder-card reveal">
+                <img src="sashank.PNG" alt="Sashank">
+                <div class="founder-info">
+                    <span>TECH & ANALYTICS</span>
+                    <h4>Sashank Katuwal</h4>
+                    <p>Analyzing meta shifts and optimizing team efficiency.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 HAMI NEPAL ESPORTS | ESTABLISHED FOR GLORY</p>
+    </footer>
+
+    <script>
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+            reveal();
+        };
+
+        function reveal() {
+            let reveals = document.querySelectorAll(".reveal");
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        reveal(); // Init on load
+    </script>
+</body>
+</html>

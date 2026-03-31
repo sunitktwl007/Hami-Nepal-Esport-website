@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HN Clan Shop | Hami Nepal</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #de1118;
+            --secondary: #00a6ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --diamond: #b9f2ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://www.transparenttextures.com/patterns/dark-matter.png');
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.95);
+            border-bottom: 2px solid var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: #fff; text-decoration: none; font-size: 1.5rem; }
+        .logo span { color: var(--accent); }
+
+        .currency-display {
+            background: var(--glass);
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Orbitron';
+        }
+
+        /* ================= CONTENT ================= */
+        .shop-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .shop-header h1 { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 5px; text-transform: uppercase; }
+        .shop-header p { color: #888; font-weight: 500; }
+
+        /* CATEGORY TABS */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #666;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active { border-color: var(--accent); color: #fff; background: rgba(222, 17, 24, 0.1); }
+
+        /* ITEM GRID */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .shop-item {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .shop-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 30px rgba(0, 166, 255, 0.2);
+        }
+
+        .item-image {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .item-image i { font-size: 4rem; color: var(--diamond); filter: drop-shadow(0 0 15px var(--secondary)); }
+        
+        /* DIAMOND ICON GLOW */
+        .fa-gem { animation: gemGlow 3s infinite ease-in-out; }
+        @keyframes gemGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--secondary)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 20px var(--secondary)); transform: scale(1.1); }
+        }
+
+        .item-title { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 5px; }
+        .item-desc { color: #888; font-size: 0.85rem; margin-bottom: 20px; }
+
+        .price-tag {
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Orbitron';
+            color: gold;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-family: 'Orbitron';
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+        }
+
+        .buy-btn:hover { background: #fff; color: #000; }
+
+        /* ================= MODAL ================= */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #111;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--accent);
+            max-width: 400px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            text-align: center;
+            font-family: 'Orbitron';
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">HAMI <span>NEPAL</span></a>
+        <div class="currency-display">
+            <i class="fas fa-coins" style="color: gold;"></i>
+            <span id="user-balance">5,000</span> <span style="font-size: 0.7rem; color: #888;">HC</span>
+        </div>
+    </header>
+
+    <div class="shop-container">
+        <div class="shop-header">
+            <h1>Clan Rewards Shop</h1>
+            <p>Exchange your Hami-Coins for real Free Fire Diamonds & Loot Crate.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active">DIAMONDS</button>
+            <button class="tab-btn">REDEEM CODES</button>
+            <button class="tab-btn">HN MERCH</button>
+        </div>
+
+        <div class="item-grid">
+            <div class="shop-item">
+                <div class="item-image"><i class="fas fa-gem"></i></div>
+                <h3 class="item-title">100 DIAMONDS</h3>
+                <p class="item-desc">Direct Top-up to your FF Player ID.</p>
+                <div class="price-tag">1,000 HC</div>
+                <button class="buy-btn" onclick="openShopModal('100 Diamonds', 1000)">PURCHASE</button>
+            </div>
+
+            <div class="shop-item" style="border-color: var(--secondary);">
+                <div class="item-image"><i class="fas fa-gem" style="color: #00ffcc;"></i></div>
+                <h3 class="item-title">310 DIAMONDS</h3>
+                <p class="item-desc">Premium Top-up via HN Official.</p>
+                <div class="price-tag">2,800 HC</div>
+                <button class="buy-btn" onclick="openShopModal('310 Diamonds', 2800)">PURCHASE</button>
+            </div>
+
+            <div class="shop-item">
+                <div class="item-image"><i class="fas fa-gem" style="color: #ff00ff;"></i></div>
+                <h3 class="item-title">520 DIAMONDS</h3>
+                <p class="item-desc">The Pro Pack for serious Survivors.</p>
+                <div class="price-tag">4,500 HC</div>
+                <button class="buy-btn" onclick="openShopModal('520 Diamonds', 4500)">PURCHASE</button>
+            </div>
+
+            <div class="shop-item">
+                <div class="item-image"><i class="fas fa-crown" style="color: gold;"></i></div>
+                <h3 class="item-title">MONTHLY PASS</h3>
+                <p class="item-desc">Redeem Code for Monthly Membership.</p>
+                <div class="price-tag">12,000 HC</div>
+                <button class="buy-btn" onclick="openShopModal('Monthly Pass', 12000)">PURCHASE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="shopModal">
+        <div class="modal-content">
+            <h2 id="modalTitle" style="font-family: Orbitron;"></h2>
+            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Enter your Free Fire Player ID to continue.</p>
+            <input type="text" id="playerID" placeholder="PLAYER ID (e.g. 123456789)">
+            <button class="buy-btn" onclick="processPurchase()">CONFIRM REDEEM</button>
+            <button style="background:none; border:none; color:#555; margin-top:15px; cursor:pointer;" onclick="closeModal()">CANCEL</button>
+        </div>
+    </div>
+
+    <script>
+        let currentBalance = 5000;
+        let selectedItemPrice = 0;
+
+        function openShopModal(title, price) {
+            selectedItemPrice = price;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('shopModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('shopModal').style.display = 'none';
+        }
+
+        function processPurchase() {
+            const playerID = document.getElementById('playerID').value;
+            
+            if(playerID.length < 5) {
+                alert("Please enter a valid Player ID!");
+                return;
+            }
+
+            if(currentBalance < selectedItemPrice) {
+                alert("Insufficient Hami-Coins! Win more predictions to earn.");
+                return;
+            }
+
+            // Deduct Balance
+            currentBalance -= selectedItemPrice;
+            document.getElementById('user-balance').innerText = currentBalance.toLocaleString();
+            
+            alert("SUCCESS! Request sent for Player ID: " + playerID + ". Diamonds will be added within 24 hours.");
+            closeModal();
+        }
+    </script>
+</body>
+</html>

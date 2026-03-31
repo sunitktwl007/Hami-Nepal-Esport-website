@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal Shop | Official Kit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon-red: #ff003c;
+            --bg-dark: #050505;
+            --card-bg: #0f0f0f;
+            --input-bg: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+        /* Navigation */
+        nav {
+            padding: 20px 8%; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(0,0,0,0.9);
+            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100;
+        }
+        .nav-logo { font-family: 'Orbitron'; font-weight: 900; color: var(--neon-red); display: flex; align-items: center; gap: 10px; }
+        .nav-logo img { height: 40px; }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { color: #fff; text-decoration: none; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; font-size: 0.8rem; }
+
+        /* Shop Grid */
+        .main-container {
+            max-width: 1300px; margin: 50px auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px;
+        }
+
+        /* --- 3D DISPLAY SECTION --- */
+        .video-display-container {
+            position: sticky; top: 100px; height: 600px;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%); 
+            border: 1px solid #222; border-radius: 10px;
+            overflow: hidden; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        #obj-canvas-container {
+            width: 100%; height: 100%; cursor: grab;
+        }
+
+        #loading-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: flex; align-items: center; justify-content: center;
+            color: var(--neon-red); font-family: 'Orbitron'; z-index: 5;
+        }
+
+        .video-overlay-text {
+            position: absolute; bottom: 30px; left: 30px;
+            font-family: 'Orbitron'; background: rgba(255, 0, 60, 0.1);
+            padding: 10px 20px; border-left: 3px solid var(--neon-red);
+            backdrop-filter: blur(5px); pointer-events: none; z-index: 10;
+        }
+
+        /* --- ORDER FORM SECTION --- */
+        .order-details { background: var(--card-bg); padding: 45px; border-radius: 15px; border: 1px solid #1a1a1a; }
+        .sku-tag { color: var(--neon-red); font-family: 'Orbitron'; font-size: 0.8rem; letter-spacing: 3px; }
+        h1 { font-family: 'Orbitron'; font-size: 2.8rem; margin: 10px 0; letter-spacing: 2px; }
+        .section-divider { margin: 30px 0; border-bottom: 1px solid #222; position: relative; }
+        .section-divider::after { content: 'STEP'; position: absolute; background: var(--card-bg); padding: 0 10px; top: -10px; left: 0; font-size: 0.7rem; color: #444; }
+
+        .field-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.75rem; color: #888; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
+        input, textarea { width: 100%; background: var(--input-bg); border: 1px solid #333; padding: 15px; color: #fff; font-family: 'Rajdhani'; font-size: 1.1rem; }
+        
+        .size-picker { display: flex; gap: 10px; margin-top: 10px; }
+        .size-btn { flex: 1; padding: 12px; border: 1px solid #333; text-align: center; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; font-size: 0.8rem; }
+        .size-btn.active { background: var(--neon-red); color: #000; border-color: var(--neon-red); }
+
+        .price-summary { background: #000; padding: 25px; border-radius: 8px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; }
+        .price-amount { font-family: 'Orbitron'; font-size: 2rem; color: #fff; }
+
+        .checkout-btn { width: 100%; background: var(--neon-red); color: #fff; border: none; padding: 22px; font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; margin-top: 20px; cursor: pointer; letter-spacing: 4px; }
+
+        @media (max-width: 1000px) {
+            .main-container { grid-template-columns: 1fr; }
+            .video-display-container { position: relative; top: 0; height: 450px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo"><img src="sammyam.png" alt="Logo"> HAMI NEPAL</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#" style="color: var(--neon-red);">Jersey Shop</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <div class="video-display-container">
+            <div id="loading-overlay">LOADING OBJ...</div>
+            <div id="obj-canvas-container"></div>
+            
+            <div class="video-overlay-text">
+                <p style="font-size: 0.7rem; color: var(--neon-red);">OFFICIAL PRODUCT</p>
+                <p style="font-size: 1.1rem;">360° OBJ VIEW</p>
+            </div>
+        </div>
+
+        <div class="order-details">
+            <span class="sku-tag">MODEL: HN-2026-PRO</span>
+            <h1>ELITE JERSEY</h1>
+            <p style="color: #666;">Tournament-grade jersey. Custom OBJ rendering enabled.</p>
+
+            <form id="shopForm">
+                <div class="section-divider"></div>
+                <div class="field-group">
+                    <label>Player Name</label>
+                    <input type="text" id="playerName" placeholder="Enter name" required>
+                </div>
+
+                <div class="field-group">
+                    <label>Size</label>
+                    <div class="size-picker">
+                        <div class="size-btn" onclick="setSize(this, 'S')">S</div>
+                        <div class="size-btn active" onclick="setSize(this, 'M')">M</div>
+                        <div class="size-btn" onclick="setSize(this, 'L')">L</div>
+                    </div>
+                    <input type="hidden" id="selectedSize" value="M">
+                </div>
+
+                <div class="price-summary">
+                    <span style="color:#666">TOTAL</span>
+                    <div class="price-amount">Rs. 1,499</div>
+                </div>
+
+                <button type="submit" class="checkout-btn">CONFIRM ORDER</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- THREE.JS OBJ RENDERER ENGINE ---
+        const container = document.getElementById('obj-canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        camera.add(pointLight);
+        scene.add(camera);
+
+        // Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Load OBJ
+        const loader = new THREE.OBJLoader();
+        loader.load('3d.glb', (object) => {
+            // Center the model
+            const box = new THREE.Box3().setFromObject(object);
+            const center = box.getCenter(new THREE.Vector3());
+            object.position.x += (object.position.x - center.x);
+            object.position.y += (object.position.y - center.y);
+            object.position.z += (object.position.z - center.z);
+            
+            scene.add(object);
+            document.getElementById('loading-overlay').style.display = 'none';
+        }, 
+        (xhr) => { console.log((xhr.loaded / xhr.total * 100) + '% loaded'); },
+        (error) => { 
+            console.error('An error happened', error);
+            document.getElementById('loading-overlay').innerHTML = "ERROR LOADING .OBJ";
+        });
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Form Logic
+        function setSize(element, size) {
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('selectedSize').value = size;
+        }
+    </script>
+</body>
+</html>

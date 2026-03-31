@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal | Recruitment Terminal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon-red: #ff003c;
+            --dark-red: #35010c;
+            --panel-bg: rgba(10, 10, 10, 0.9);
+            --input-border: rgba(255, 0, 60, 0.3);
+            --glow: 0 0 15px rgba(255, 0, 60, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Background Animated Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--dark-red) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--dark-red) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: gridMove 10s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 50px; }
+        }
+
+        /* Custom Crosshair Cursor */
+        #cursor {
+            width: 40px; height: 40px; border: 1px solid var(--neon-red);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transform: translate(-50%, -50%);
+            display: flex; justify-content: center; align-items: center;
+            transition: width 0.3s, height 0.3s;
+        }
+        #cursor::after { content: ''; width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+        /* Recruitment Terminal Container */
+        .terminal {
+            width: 90%;
+            max-width: 1100px;
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-red);
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 0, 60, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Corner Accents */
+        .terminal::before, .terminal::after {
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border: 3px solid var(--neon-red);
+        }
+        .terminal::before { top: -5px; left: -5px; border-right: 0; border-bottom: 0; }
+        .terminal::after { bottom: -5px; right: -5px; border-left: 0; border-top: 0; }
+
+        /* Header Area */
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--input-border);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-small { width: 80px; filter: drop-shadow(0 0 10px var(--neon-red)); }
+        
+        .header-title h1 {
+            font-family: 'Orbitron';
+            font-size: 2rem;
+            letter-spacing: 5px;
+            text-shadow: var(--glow);
+        }
+
+        .status-tag {
+            font-size: 0.8rem;
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+            padding: 5px 15px;
+            text-transform: uppercase;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Step Indicator */
+        .step-nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex: 1;
+            height: 5px;
+            background: #222;
+            position: relative;
+        }
+        .step.active { background: var(--neon-red); box-shadow: var(--glow); }
+
+        /* Form Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .input-wrap { display: flex; flex-direction: column; gap: 8px; }
+        
+        label {
+            font-family: 'Orbitron';
+            font-size: 0.75rem;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            padding: 15px;
+            color: #fff;
+            font-family: 'Rajdhani';
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.05);
+            outline: none;
+            box-shadow: inset 0 0 10px rgba(255, 0, 60, 0.2);
+        }
+
+        .full-width { grid-column: span 2; }
+
+        /* Agreement Checkboxes */
+        .checkbox-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid var(--neon-red);
+        }
+
+        .cb-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Tactical Button */
+        .submit-trigger {
+            margin-top: 30px;
+            width: 100%;
+            padding: 25px;
+            background: transparent;
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            font-family: 'Orbitron';
+            font-size: 1.2rem;
+            letter-spacing: 10px;
+            font-weight: 900;
+            transition: 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-trigger:hover {
+            background: var(--neon-red);
+            color: #000;
+            box-shadow: 0 0 50px var(--neon-red);
+        }
+
+        .submit-trigger span { position: relative; z-index: 2; }
+
+        /* Mobile Friendly */
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .terminal { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <div id="cursor"></div>
+
+    <section class="terminal reveal">
+        <div class="terminal-header">
+            <div class="header-title">
+                <h1>HAMI NEPAL RECRUITMENT</h1>
+                <p style="color: #666; font-size: 0.9rem;">ENCRYPTED CONNECTION: STABLE</p>
+            </div>
+            <img src="sammyam.png" class="logo-small" alt="">
+            <div class="status-tag">System: Open</div>
+        </div>
+
+        <div class="step-nav">
+            <div class="step active"></div>
+            <div class="step active"></div>
+            <div class="step active"></div>
+        </div>
+
+        <form id="recruitmentForm">
+            <div class="form-grid">
+                <div class="input-wrap">
+                    <label>OPERATIVE FULL NAME</label>
+                    <input type="text" placeholder="John 'Ghost' Doe" required>
+                </div>
+                <div class="input-wrap">
+                    <label>AGE / CLASSIFICATION</label>
+                    <input type="number" placeholder="18">
+                </div>
+                <div class="input-wrap">
+                    <label>CONTACT EMAIL</label>
+                    <input type="email" placeholder="hq@haminepal.com" required>
+                </div>
+                <div class="input-wrap">
+                    <label>DISCORD COMMS ID</label>
+                    <input type="text" placeholder="User#0000" required>
+                </div>
+
+                <div class="input-wrap">
+                    <label>IN-GAME ALIAS (IGN)</label>
+                    <input type="text" placeholder="HN_Warrior" required>
+                </div>
+                <div class="input-wrap">
+                    <label>COMBAT ROLE</label>
+                    <select>
+                        <option>Assaulter</option>
+                        <option>Sniper</option>
+                        <option>Support/Healer</option>
+                        <option>IGL (Leader)</option>
+                    </select>
+                </div>
+                <div class="input-wrap">
+                    <label>CURRENT RANK / PEAK</label>
+                    <input type="text" placeholder="Grandmaster 75 Stars">
+                </div>
+                <div class="input-wrap">
+                    <label>DEVICE SPECIFICATIONS</label>
+                    <input type="text" placeholder="e.g. iPhone 15 Pro Max">
+                </div>
+
+                <div class="input-wrap full-width">
+                    <label>MISSION MOTIVATION</label>
+                    <textarea rows="4" placeholder="Why should Hami Nepal trust you in the arena?"></textarea>
+                </div>
+                
+                <div class="input-wrap">
+                    <label>PRACTICE CAPACITY (WEEKLY)</label>
+                    <input type="text" placeholder="40+ Hours">
+                </div>
+                <div class="input-wrap">
+                    <label>GAMEPLAY FOOTAGE (LINK)</label>
+                    <input type="url" placeholder="Youtube / Drive Link">
+                </div>
+            </div>
+
+            <div class="checkbox-area">
+                <label class="cb-item">
+                    <input type="checkbox" required>
+                    <span>I confirm all data provided is accurate.</span>
+                </label>
+                <label class="cb-item">
+                    <input type="checkbox" required>
+                    <span>I agree to the Hami Nepal Professional Code of Conduct.</span>
+                </label>
+            </div>
+
+            <button type="submit" class="submit-trigger">
+                <span>INITIALIZE DATA UPLOAD</span>
+            </button>
+        </form>
+    </section>
+
+    <script>
+        // Custom Cursor Movement
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Hover expansions
+        const inputs = document.querySelectorAll('input, select, textarea, button');
+        inputs.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '70px';
+                cursor.style.height = '70px';
+                cursor.style.borderColor = '#fff';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.borderColor = '#ff003c';
+            });
+        });
+
+        // Form Submit Simulation
+        document.getElementById('recruitmentForm').onsubmit = function(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.submit-trigger span');
+            btn.innerHTML = "UPLOADING...";
+            setTimeout(() => {
+                alert("SUCCESS: Your profile has been uploaded to Hami Nepal HQ.");
+                btn.innerHTML = "INITIALIZE DATA UPLOAD";
+            }, 2000);
+        };
+    </script>
+</body>
+</html>

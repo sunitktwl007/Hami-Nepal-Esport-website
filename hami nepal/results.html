@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal | Match Highlights</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon-red: #ff003c;
+            --dark-red: #35010c;
+            --bg-black: #050505;
+            --card-bg: #0f0f0f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-black); color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+        /* --- Header Section --- */
+        .highlights-header {
+            text-align: center; padding: 80px 10% 40px;
+            background: linear-gradient(to bottom, #1a050a 0%, var(--bg-black) 100%);
+        }
+        .highlights-header h1 { font-family: 'Orbitron'; font-size: 3.5rem; letter-spacing: 5px; text-transform: uppercase; }
+        .highlights-header span { color: var(--neon-red); }
+        .highlights-header p { color: #888; letter-spacing: 2px; margin-top: 10px; font-weight: 500; }
+
+        /* --- Filter Navigation --- */
+        .filter-nav {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: transparent; border: 1px solid #333; color: #fff;
+            padding: 10px 25px; font-family: 'Orbitron'; font-size: 0.8rem;
+            cursor: pointer; transition: 0.4s; letter-spacing: 2px;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--neon-red); border-color: var(--neon-red);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4); color: #fff;
+        }
+
+        /* --- Highlights Grid --- */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px; padding: 0 8% 80px;
+        }
+
+        .gallery-item {
+            position: relative; overflow: hidden; border-radius: 4px;
+            background: var(--card-bg); border: 1px solid #1a1a1a;
+            aspect-ratio: 16 / 9; cursor: pointer;
+        }
+
+        .gallery-item.featured { border: 1px solid var(--neon-red); box-shadow: inset 0 0 10px var(--neon-red); }
+
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            opacity: 0.8;
+        }
+
+        .gallery-item:hover img { transform: scale(1.15); opacity: 1; }
+
+        .item-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            transform: translateY(100%); transition: 0.4s ease;
+        }
+        .gallery-item:hover .item-overlay { transform: translateY(0); }
+        
+        .item-overlay h4 { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--neon-red); }
+        .item-overlay p { font-size: 0.8rem; color: #ccc; }
+
+        /* --- Lightbox Modal --- */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); display: none; z-index: 2000;
+            justify-content: center; align-items: center; backdrop-filter: blur(10px);
+        }
+        .lightbox.active { display: flex; }
+        
+        .lightbox-content { 
+            position: relative; 
+            max-width: 85%; 
+            max-height: 80%; 
+            display: flex;
+            justify-content: center;
+        }
+        
+        .lightbox-content img { 
+            max-width: 100%; 
+            max-height: 80vh; 
+            border: 2px solid var(--neon-red); 
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
+        }
+        
+        /* Close Button Styling */
+        .close-lightbox { 
+            position: absolute; 
+            top: -60px; 
+            right: 0; 
+            font-size: 3rem; 
+            color: #fff; 
+            cursor: pointer; 
+            transition: 0.3s;
+            z-index: 2100;
+        }
+        .close-lightbox:hover { color: var(--neon-red); transform: rotate(90deg); }
+
+        .nav-arrow { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            font-size: 2.5rem; 
+            color: #fff; 
+            cursor: pointer; 
+            padding: 20px; 
+            transition: 0.3s;
+            z-index: 2100;
+        }
+        .nav-arrow:hover { color: var(--neon-red); scale: 1.2; }
+        .prev-arrow { left: -80px; }
+        .next-arrow { right: -80px; }
+
+        /* --- Footer CTA --- */
+        .gallery-footer { text-align: center; padding-bottom: 100px; }
+        .cta-btn {
+            background: transparent; border: 2px solid var(--neon-red); color: #fff;
+            padding: 18px 45px; font-family: 'Orbitron'; font-weight: 900;
+            letter-spacing: 4px; cursor: pointer; transition: 0.4s;
+        }
+        .cta-btn:hover { background: var(--neon-red); box-shadow: 0 0 40px var(--neon-red); transform: translateY(-5px); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .prev-arrow { left: 10px; background: rgba(0,0,0,0.5); border-radius: 50%; }
+            .next-arrow { right: 10px; background: rgba(0,0,0,0.5); border-radius: 50%; }
+            .lightbox-content { max-width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="highlights-header">
+        <h1 data-aos="fade-down">Match <span>Highlights</span></h1>
+        <p data-aos="fade-up" data-aos-delay="200">VICTORIES, MOMENTS, AND THE ROAD TO THE CHAMPIONSHIP</p>
+    </section>
+
+    <div class="filter-nav" data-aos="fade-in">
+        <button class="filter-btn active" onclick="filterGallery('all', event)">ALL MOMENTS</button>
+        <button class="filter-btn" onclick="filterGallery('tournament', event)">TOURNAMENTS</button>
+        <button class="filter-btn" onclick="filterGallery('guild', event)">GUILD CLASH</button>
+        <button class="filter-btn" onclick="filterGallery('mvp', event)">MVP PLAYS</button>
+    </div>
+
+    <div class="gallery-grid" id="mainGallery">
+        <div class="gallery-item tournament featured" data-aos="zoom-in" onclick="openLightbox(0)">
+            <img src="img1.jpg" alt="Highlight 1">
+            <div class="item-overlay">
+                <h4>CHAMPIONSHIP FINALS</h4>
+                <p>Hami Nepal vs Guild X | Won 4-0</p>
+            </div>
+        </div>
+
+        <div class="gallery-item guild" data-aos="zoom-in" data-aos-delay="100" onclick="openLightbox(1)">
+            <img src="img2.jpg" alt="Highlight 2">
+            <div class="item-overlay">
+                <h4>GUILD SCRIMS</h4>
+                <p>Tactical Masterclass on Bermuda</p>
+            </div>
+        </div>
+
+        <div class="gallery-item mvp" data-aos="zoom-in" data-aos-delay="200" onclick="openLightbox(2)">
+            <img src="img3.jpg" alt="Highlight 3">
+            <div class="item-overlay">
+                <h4>SAMMYAM MVP</h4>
+                <p>1v4 Clutch Moment - Last Zone</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-footer">
+        <button class="cta-btn">WATCH FULL ARCHIVE</button>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightboxOnOut(event)">
+        <div class="lightbox-content">
+            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+            <div class="nav-arrow prev-arrow" onclick="changeImage(-1, event)"><i class="fas fa-chevron-left"></i></div>
+            <img src="" id="lightboxImg">
+            <div class="nav-arrow next-arrow" onclick="changeImage(1, event)"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Generate dynamic items
+        const categories = ['tournament', 'guild', 'mvp', 'tournament', 'guild'];
+        const container = document.getElementById('mainGallery');
+        for(let i=4; i<=15; i++) {
+            const cat = categories[i % categories.length];
+            container.innerHTML += `
+                <div class="gallery-item ${cat}" data-aos="zoom-in" onclick="openLightbox(${i-1})">
+                    <img src="img${i}.jpg" alt="Highlight ${i}">
+                    <div class="item-overlay">
+                        <h4>MATCH MOMENT ${i}</h4>
+                        <p>Pro League Season Highlights</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Gallery Filter Logic
+        function filterGallery(category, event) {
+            const items = document.querySelectorAll('.gallery-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Lightbox Logic
+        let currentImgIndex = 0;
+        const images = []; 
+        for(let i=1; i<=15; i++) images.push(`img${i}.jpg`);
+
+        function openLightbox(index) {
+            currentImgIndex = index;
+            const lbImg = document.getElementById('lightboxImg');
+            lbImg.src = images[currentImgIndex];
+            
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close when clicking outside the image
+        function closeLightboxOnOut(e) {
+            if (e.target.id === "lightbox") {
+                closeLightbox();
+            }
+        }
+
+        function changeImage(step, event) {
+            event.stopPropagation(); // Prevents lightbox from closing when clicking arrows
+            currentImgIndex += step;
+            if (currentImgIndex >= images.length) currentImgIndex = 0;
+            if (currentImgIndex < 0) currentImgIndex = images.length - 1;
+            document.getElementById('lightboxImg').src = images[currentImgIndex];
+        }
+
+        // Close on Esc key and Arrow Keys for Nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") changeImage(1, e);
+            if (e.key === "ArrowLeft") changeImage(-1, e);
+        });
+    </script>
+</body>
+</html>

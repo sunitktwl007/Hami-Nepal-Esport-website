@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal | The Roster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --neon-red: #ff003c;
+            --dark-red: #1a050a;
+            --card-bg: rgba(15, 15, 15, 0.9);
+            --border-glow: rgba(255, 0, 60, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #050505; color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+        /* --- HEADER --- */
+        .roster-header {
+            text-align: center; padding: 80px 10% 40px;
+            background: radial-gradient(circle at top, var(--dark-red) 0%, #050505 100%);
+        }
+        .roster-header h1 { 
+            font-family: 'Orbitron'; font-size: 3.5rem; letter-spacing: 10px; 
+            text-transform: uppercase; text-shadow: 0 0 20px var(--neon-red);
+        }
+        .roster-header span { color: var(--neon-red); }
+        .roster-header p { color: #888; font-size: 1.2rem; margin-top: 10px; letter-spacing: 2px; }
+
+        /* --- STATS --- */
+        .stats-summary {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            max-width: 1000px; margin: 0 auto 60px; text-align: center;
+            border: 1px solid #222; padding: 30px; background: rgba(255,255,255,0.02);
+        }
+        .stat-item h2 { font-family: 'Orbitron'; color: var(--neon-red); font-size: 2.5rem; }
+        .stat-item p { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- FILTERS --- */
+        .roster-filters {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap;
+        }
+        .filter-tab {
+            background: transparent; border: 1px solid #333; color: #fff;
+            padding: 10px 25px; font-family: 'Orbitron'; font-size: 0.8rem;
+            cursor: pointer; transition: 0.3s;
+        }
+        .filter-tab.active, .filter-tab:hover {
+            background: var(--neon-red); border-color: var(--neon-red);
+            box-shadow: 0 0 15px var(--neon-red);
+        }
+
+        /* --- GRID --- */
+        .roster-grid {
+            display: grid; padding: 0 8% 100px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .player-card {
+            background: var(--card-bg); border: 1px solid #222;
+            padding: 20px; border-radius: 4px; position: relative;
+            transition: 0.4s ease; overflow: hidden; text-align: center;
+            cursor: pointer;
+        }
+        .player-card:hover {
+            border-color: var(--neon-red); transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.2);
+        }
+
+        .mvp-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--neon-red); color: #fff; font-size: 0.6rem;
+            padding: 3px 8px; font-family: 'Orbitron'; border-radius: 2px;
+            animation: pulse 2s infinite; z-index: 2;
+        }
+
+        .player-img-wrap {
+            width: 140px; height: 140px; margin: 0 auto 20px;
+            border-radius: 50%; border: 2px solid #333; padding: 5px;
+            transition: 0.4s; position: relative;
+        }
+        .player-card:hover .player-img-wrap { border-color: var(--neon-red); }
+        .player-img-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #111; }
+
+        .player-info h3 { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 1px; }
+        .player-role { color: var(--neon-red); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; }
+
+        .mini-stats {
+            display: flex; justify-content: space-around;
+            border-top: 1px solid #222; padding-top: 15px; margin-top: 15px;
+        }
+        .stat-small p { font-size: 0.9rem; font-weight: bold; }
+        .stat-small span { font-size: 0.6rem; color: #555; text-transform: uppercase; display: block; }
+
+        .player-socials { margin-top: 15px; display: flex; justify-content: center; gap: 15px; }
+        .player-socials a { color: #444; transition: 0.3s; font-size: 1rem; }
+        .player-socials a:hover { color: var(--neon-red); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; z-index: 9999;
+            align-items: center; justify-content: center; backdrop-filter: blur(10px);
+        }
+        .modal-card {
+            background: #0a0a0a; border: 1px solid var(--neon-red);
+            width: 90%; max-width: 600px; padding: 40px; border-radius: 5px;
+            position: relative; display: flex; gap: 30px;
+        }
+        #modalImg { width: 200px; height: 200px; object-fit: cover; border: 2px solid var(--neon-red); }
+
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+
+        @media (max-width: 768px) {
+            .stats-summary { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .modal-card { flex-direction: column; text-align: center; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="roster-header">
+        <h1>THE <span>PROS</span></h1>
+        <p>ELITE OPERATIVES OF HAMI NEPAL</p>
+    </section>
+
+    <div class="stats-summary">
+        <div class="stat-item"><h2 class="counter">40</h2><p>Active Staff</p></div>
+        <div class="stat-item"><h2 class="counter">120</h2><p>Match Wins</p></div>
+        <div class="stat-item"><h2 class="counter">15</h2><p>Trophies</p></div>
+        <div class="stat-item"><h2 class="counter">05</h2><p>Global Regions</p></div>
+    </div>
+
+    <div class="roster-filters">
+        <button class="filter-tab active" onclick="filterType('all', event)">ALL STAFF</button>
+        <button class="filter-tab" onclick="filterType('player', event)">PLAYERS</button>
+        <button class="filter-tab" onclick="filterType('coach', event)">COACHES</button>
+        <button class="filter-tab" onclick="filterType('management', event)">MANAGEMENT</button>
+    </div>
+
+    <div class="roster-grid" id="rosterGrid"></div>
+
+    <div class="modal-overlay" id="bioModal" onclick="closeBio()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <img src="" id="modalImg">
+            <div>
+                <h2 id="modalName" style="font-family: 'Orbitron'; color: var(--neon-red); margin-bottom: 5px;"></h2>
+                <h4 id="modalRole" style="letter-spacing: 2px; margin-bottom: 15px; color: #eee;"></h4>
+                <p id="modalQuote" style="color: #aaa; margin-bottom: 20px; font-style: italic; line-height: 1.5;"></p>
+                <div class="mini-stats">
+                    <div class="stat-small"><span>STATUS</span><p>ACTIVE</p></div>
+                    <div class="stat-small"><span>REGION</span><p>NEPAL</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA ARRAY: Add or remove members here easily
+        const members = [
+            { name: "HN SAMMYAM", role: "OWNER, rusher", type: "player", img: "sammyamxettri.jpeg", s1: "K/D", v1: "4.5", s2: "HS%", v2: "68%", mvp: true, quote: "Sammyam is the main founder of hami Nepal" },
+            { name: "HN SASHANK", role: "mobile legend, old strategy", type: "coach", img: "taipankatuwal.jpeg", s1: "EXP", v1: "6Y", s2: "WINS", v2: "85", mvp: false, quote: "Precision in planning leads to execution in battle." },
+            { name: "HN SULABH", role: "legend pc player", type: "management", img: "sulabhp.jpeg", s1: "DEPT", v1: "OPS", s2: "LEVEL", v2: "SR", mvp: false, quote: "Managing greatness behind the scenes." },
+            { name: "HN MANAS", role: "Esport team manager", type: "player", img: "manas.jpeg", s1: "K/D", v1: "3.2", s2: "HS%", v2: "55%", mvp: false, quote: "I go in first, I come out last." },
+            { name: "HN PRINCE", role: "IGL / Captain", type: "player", img: "hkbhaii.jpeg", s1: "K/D", v1: "2.8", s2: "HS%", v2: "45%", mvp: true, quote: "Strategy is my weapon, loyalty is my armor." },
+            { name: "HN PREM", role: "BOT PLAYER MANAGEMENT", type: "player", img: "remon.jpg", s1: "K/D", v1: "5.0", s2: "HS%", v2: "92%", mvp: false, quote: "One shot. That's all I need." },
+            { name: "HN SUGAM", role: "Support", type: "player", img: "sugamrajb.jpeg", s1: "K/D", v1: "2.1", s2: "ASSISTS", v2: "400", mvp: false, quote: "Holding the line so the stars can shine." },
+            { name: "HN ODINSON", role: "Lurker", type: "player", img: "kheleen.jpeg", s1: "K/D", v1: "3.5", s2: "CLUTCH", v2: "12", mvp: false, quote: "They never see me until it's too late." },
+            { name: "HN STALKER", role: "Scout", type: "player", img: "stalker.jpeg", s1: "K/D", v1: "2.5", s2: "INTEL", v2: "HIGH", mvp: false, quote: "Information is the ultimate power." },
+            { name: "HN TILAK", role: "Assaulter", type: "player", img: "tilakrm.jpeg", s1: "K/D", v1: "3.1", s2: "HS%", v2: "60%", mvp: false, quote: "Pure aggression, no excuses." },
+            { name: "HN SEXA", role: "Tactical Coach", type: "coach", img: "sexa.jpeg", s1: "EXP", v1: "4Y", s2: "WINS", v2: "45", mvp: false, quote: "Analyzing the chaos." },
+            { name: "HN AVAY", role: "Community Mgr", type: "management", img: "avay.jpeg", s1: "FANS", v1: "10K", s2: "EXP", v2: "3Y", mvp: false, quote: "Hami Nepal is a family." },
+            { name: "HN KRRISH", role: "Analyst", type: "coach", img: "krrishkk.jpeg", s1: "DATA", v1: "V1.0", s2: "WINS", v2: "30", mvp: false, quote: "Every pixel matters." },
+            { name: "HN AAKASH", role: "Flex Player", type: "player", img: "aakash.jpeg", s1: "K/D", v1: "2.9", s2: "HS%", v2: "50%", mvp: false, quote: "Adapting to win." },
+            { name: "HN REMON", role: "Head of Talent", type: "management", img: "remonbro.jpeg", s1: "HIRES", v1: "20+", s2: "LEVEL", v2: "SR", mvp: false, quote: "Spotting the next generation." },
+            { name: "HN NOIXZIN", role: "Sub Sniper", type: "player", img: "noixzin.jpeg", s1: "K/D", v1: "4.2", s2: "HS%", v2: "85%", mvp: false, quote: "Patience is my specialty." },
+            { name: "HN NIKESH", role: "Graphic Lead", type: "management", img: "nikeshbro.jpeg", s1: "ART", v1: "100+", s2: "EXP", v2: "5Y", mvp: false, quote: "Visualizing the victory." },
+            { name: "Nikesh", role: "Entry Fragger", type: "player", img: "p10.jpg", s1: "K/D", v1: "3.7", s2: "HS%", v2: "65%", mvp: true, quote: "Speed kills." },
+            { name: "Siddharth", role: "Content Creator", type: "management", img: "m5.jpg", s1: "SUBS", v1: "50K", s2: "VIEWS", v2: "1M", mvp: false, quote: "Recording history." },
+            { name: "Pukar", role: "Psychologist", type: "coach", img: "c4.jpg", s1: "MIND", v1: "MAX", s2: "EXP", v2: "2Y", mvp: false, quote: "Mental strength is everything." },
+            // Adding more to reach 40 (Looping similar data for brevity)
+            { name: "Suraj", role: "Assaulter", type: "player", img: "p11.jpg", s1: "K/D", v1: "3.0", s2: "HS%", v2: "58%", mvp: false, quote: "Onward to glory." },
+            { name: "Abhinav", role: "Support", type: "player", img: "p12.jpg", s1: "K/D", v1: "2.0", s2: "ASSISTS", v2: "250", mvp: false, quote: "Quietly reliable." },
+            { name: "Bijay", role: "Lurker", type: "player", img: "p13.jpg", s1: "K/D", v1: "3.3", s2: "CLUTCH", v2: "8", mvp: false, quote: "Fear the silence." },
+            { name: "Milan", role: "Head Coach", type: "coach", img: "c5.jpg", s1: "EXP", v1: "8Y", s2: "WINS", v2: "110", mvp: true, quote: "I build champions." },
+            { name: "Binod", role: "HR Head", type: "management", img: "m6.jpg", s1: "DEPT", v1: "HR", s2: "LEVEL", v2: "DIR", mvp: false, quote: "Integrity first." },
+            { name: "Tanka", role: "Entry Fragger", type: "player", img: "p14.jpg", s1: "K/D", v1: "3.4", s2: "HS%", v2: "59%", mvp: false, quote: "Zero hesitation." },
+            { name: "Sabin", role: "Rifleman", type: "player", img: "p15.jpg", s1: "K/D", v1: "2.7", s2: "HS%", v2: "48%", mvp: false, quote: "Every bullet counts." },
+            { name: "Deepak", role: "Coach", type: "coach", img: "c6.jpg", s1: "EXP", v1: "3Y", s2: "WINS", v2: "20", mvp: false, quote: "Trust the process." },
+            { name: "Jenish", role: "Entry Fragger", type: "player", img: "p16.jpg", s1: "K/D", v1: "4.1", s2: "HS%", v2: "70%", mvp: false, quote: "Breaking the lines." },
+            { name: "Bishal", role: "Sniper", type: "player", img: "p17.jpg", s1: "K/D", v1: "4.4", s2: "HS%", v2: "88%", mvp: false, quote: "Watching from the shadows." },
+            { name: "Om", role: "Team Lead", type: "management", img: "m7.jpg", s1: "DEPT", v1: "MGT", s2: "LEVEL", v2: "SR", mvp: false, quote: "Unified for Nepal." },
+            { name: "Raju", role: "Assaulter", type: "player", img: "p18.jpg", s1: "K/D", v1: "2.8", s2: "HS%", v2: "52%", mvp: false, quote: "Never back down." },
+            { name: "Kishor", role: "Flex", type: "player", img: "p19.jpg", s1: "K/D", v1: "2.6", s2: "HS%", v2: "49%", mvp: false, quote: "Ready for anything." },
+            { name: "Arjun", role: "Video Editor", type: "management", img: "m8.jpg", s1: "PROJ", v1: "50+", s2: "EXP", v2: "2Y", mvp: false, quote: "Making legends look good." },
+            { name: "Santosh", role: "Entry", type: "player", img: "p20.jpg", s1: "K/D", v1: "3.9", s2: "HS%", v2: "62%", mvp: false, quote: "Strike fast." },
+            { name: "Gopal", role: "Support", type: "player", img: "p21.jpg", s1: "K/D", v1: "1.9", s2: "ASSISTS", v2: "310", mvp: false, quote: "The backbone." },
+            { name: "Mahesh", role: "Assaulter", type: "player", img: "p22.jpg", s1: "K/D", v1: "3.0", s2: "HS%", v2: "55%", mvp: false, quote: "Leading the charge." },
+            { name: "Harke", role: "Logistics", type: "management", img: "m9.jpg", s1: "DEPT", v1: "LOG", s2: "LEVEL", v2: "MID", mvp: false, quote: "Efficiency is key." },
+            { name: "Yam", role: "Sniper", type: "player", img: "p23.jpg", s1: "K/D", v1: "4.7", s2: "HS%", v2: "90%", mvp: true, quote: "I don't miss." },
+            { name: "Shree", role: "Coach", type: "coach", img: "c7.jpg", s1: "EXP", v1: "5Y", s2: "WINS", v2: "60", mvp: false, quote: "Learn, Adapt, Conquer." }
+        ];
+
+        // RENDER FUNCTION
+        function renderRoster() {
+            const grid = document.getElementById('rosterGrid');
+            grid.innerHTML = members.map(m => `
+                <div class="player-card ${m.type}" onclick="openBio('${m.name}', '${m.role}', '${m.quote}', '${m.img}')">
+                    ${m.mvp ? '<div class="mvp-badge">MVP</div>' : ''}
+                    <div class="player-img-wrap">
+                        <img src="${m.img}" alt="${m.name}" onerror="this.src='https://via.placeholder.com/140/111/ff003c?text=${m.name}'">
+                    </div>
+                    <div class="player-info">
+                        <h3>${m.name.toUpperCase()}</h3>
+                        <p class="player-role">${m.role}</p>
+                    </div>
+                    <div class="mini-stats">
+                        <div class="stat-small"><span>${m.s1}</span><p>${m.v1}</p></div>
+                        <div class="stat-small"><span>${m.s2}</span><p>${m.v2}</p></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterType(type, event) {
+            const cards = document.querySelectorAll('.player-card');
+            const tabs = document.querySelectorAll('.filter-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                card.style.display = (type === 'all' || card.classList.contains(type)) ? 'block' : 'none';
+            });
+        }
+
+        function openBio(name, role, quote, img) {
+            document.getElementById('modalName').innerText = name.toUpperCase();
+            document.getElementById('modalRole').innerText = role;
+            document.getElementById('modalQuote').innerText = `"${quote}"`;
+            document.getElementById('modalImg').src = img;
+            // Handle placeholder if image doesn't exist
+            document.getElementById('modalImg').onerror = function() {
+                this.src = 'https://via.placeholder.com/200/111/ff003c?text=' + name;
+            };
+            document.getElementById('bioModal').style.display = 'flex';
+        }
+
+        function closeBio() {
+            document.getElementById('bioModal').style.display = 'none';
+        }
+
+        // Initialize
+        renderRoster();
+
+        // Counters
+        document.querySelectorAll('.counter').forEach(c => {
+            const target = +c.innerText;
+            let count = 0;
+            const update = () => {
+                const inc = target / 50;
+                if (count < target) {
+                    count = Math.ceil(count + inc);
+                    c.innerText = count;
+                    setTimeout(update, 30);
+                } else c.innerText = target;
+            };
+            update();
+        });
+    </script>
+</body>
+</html>

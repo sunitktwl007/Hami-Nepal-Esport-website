@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Nepal Esports | Official</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <style>
+        /* ================= RESET & CURSOR ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            cursor: none; 
+        }
+
+        body {
+            overflow-x: hidden;
+            background-color: #000;
+        }
+
+        #cursor {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #de1118;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-dot {
+            width: 5px;
+            height: 5px;
+            background: #00a6ff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        /* ================= BACKGROUND & BG FLAGS ================= */
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
+                        url('Black and Red Edgy Gaming Youtube Intro Video (1).gif') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flag-bg {
+            position: absolute;
+            width: 450px;
+            opacity: 0.2;
+            filter: blur(15px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .flag-1 { top: 10%; left: -5%; animation: bgWave 5s infinite ease-in-out; }
+        .flag-2 { bottom: 5%; right: -5%; animation: bgWave 7s infinite ease-in-out reverse; }
+
+        @keyframes bgWave {
+            0%, 100% { transform: rotate(-10deg) skewX(0deg); }
+            50% { transform: rotate(-5deg) skewX(5deg); }
+        }
+
+        /* ================= TOP NAVIGATION ================= */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 90px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #de1118;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .logo b { font-size: 45px; color: #fff; }
+
+        .navitems { display: flex; list-style: none; }
+        .navitems li { margin: 0 12px; }
+        .navitems li a {
+            font-size: 13px;
+            color: #00a6ff;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .navitems li:hover a { color: #fe0303; }
+
+        .links a {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0 8px;
+            transition: 0.3s;
+        }
+
+        /* Mobile Menu Button */
+        .checkbtn { font-size: 30px; color: white; display: none; cursor: none; }
+        #check { display: none; }
+
+        /* ================= MUSIC CONTROL ================= */
+        #music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            background: rgba(222, 17, 24, 0.8);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 15px #de1118;
+        }
+
+        /* ================= HERO SECTION ================= */
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 90px);
+            padding: 0 10%;
+            z-index: 10;
+            position: relative;
+        }
+
+        .cols { width: 50%; }
+
+        h1 {
+            font-size: 5.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .multiText { color: #d61b1b; }
+
+        p {
+            margin: 25px 0;
+            font-size: 1.1rem;
+            color: #ddd;
+            max-width: 550px;
+            line-height: 1.6;
+        }
+
+        .btns button {
+            font-size: 15px;
+            padding: 14px 35px;
+            border: none;
+            background: #de1118;
+            color: white;
+            margin-right: 15px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btns button:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        /* ================= DIAMOND SECTION ================= */
+        .diamond-promo {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 166, 255, 0.1);
+            border-left: 4px solid #00a6ff;
+            border-radius: 8px;
+            max-width: 450px;
+        }
+
+        .diamond-promo h3 {
+            color: #00a6ff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-diamond {
+            background: linear-gradient(45deg, #00a6ff, #0072ff);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 20px rgba(0, 166, 255, 0.4);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .btn-diamond:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 166, 255, 0.6);
+        }
+
+        /* Diamond Shine Effect */
+        .btn-diamond::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(30deg);
+            transition: 0s;
+        }
+
+        .btn-diamond:hover::after {
+            left: 120%;
+            transition: 0.7s;
+        }
+
+        /* ================= WAVING LOGO ANIMATION ================= */
+        .cols1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .imgbox img {
+            width: 100%;
+            max-width: 480px;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9));
+            animation: 
+                logoWave 3s infinite ease-in-out, 
+                logoFloat 6s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes logoWave {
+            0%, 100% { transform: skewY(0deg) skewX(0deg); }
+            25% { transform: skewY(3deg) skewX(2deg); }
+            75% { transform: skewY(-3deg) skewX(-2deg); }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { margin-top: 0; }
+            50% { margin-top: -40px; }
+        }
+
+        /* ================= MOBILE OPTIMIZATION ================= */
+        @media (max-width: 1100px) {
+            .navitems li { margin: 0 5px; }
+            .navitems li a { font-size: 11px; }
+        }
+
+        @media (max-width: 900px) {
+            * { cursor: auto !important; } /* Restore cursor for touch */
+            #cursor, #cursor-dot { display: none; }
+
+            .checkbtn { display: block; }
+            .navitems {
+                position: fixed;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0,0,0,0.95);
+                top: 90px;
+                left: -100%;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                transition: 0.5s;
+                z-index: 1000;
+            }
+            #check:checked ~ .navitems { left: 0; }
+            .navitems li { margin: 15px 0; }
+            .navitems li a { font-size: 20px; }
+            .links { display: none; }
+            
+            .wrapper { flex-direction: column-reverse; text-align: center; padding: 60px 5%; }
+            .cols { width: 100%; }
+            h1 { font-size: 3rem; margin-top: 20px; }
+            p { margin: 20px auto; }
+            .imgbox img { max-width: 250px; }
+            
+            .btns { display: flex; flex-direction: column; align-items: center; }
+            .btns button { margin-right: 0; width: 80%; }
+            
+            .diamond-promo { margin: 30px auto 0; width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
+
+    <audio id="guildMusic" loop>
+        <source src="guildanthem.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-toggle" onclick="toggleMusic()">
+        <i id="music-icon" class="fas fa-volume-mute"></i>
+    </div>
+
+    <div class="container">
+        <nav>
+            <div class="logo">Hami Nepal<b>.</b></div>
+            
+            <input type="checkbox" id="check">
+            <label for="check" class="checkbtn">
+                <i class="fas fa-bars"></i>
+            </label>
+
+            <ul class="navitems">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="joingn.html">Join HN</a></li>
+                <li><a href="jerseyorder.html">Buy Jersey</a></li>
+                <li><a href="results.html">Results</a></li>
+                <li><a href="tournament.html">Tournaments</a></li>
+            </ul>
+
+            <div class="links">
+                <a href="https://discord.gg/a7YhnKtqa"><i class="fab fa-discord"></i></a>
+                <a href="https://www.tiktok.com/@haminepalguild"><i class="fab fa-tiktok"></i></a>
+                <a href="https://chat.whatsapp.com/KOwBE0wUNqsD8Yo8LI23uU"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </nav>
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg" class="flag-bg flag-1" alt="Nepal Flag">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg" class="flag-bg flag-2" alt="Nepal Flag">
+
+        <div class="wrapper">
+            <div class="cols cols0">
+                <span class="topline">Esports Revolution</span>
+                <h1>We Are <br><span class="multiText"></span></h1>
+                <p>Hello survivors, This is the official website of Hami Nepal. Join our esport team for an amazing esports journey and dominate the battlefield.</p>
+                
+                <div class="btns">
+                    <button onclick="openMobileMenu()">Menu</button>
+                    <button onclick="window.location.href='tournament.html'">Tournaments</button>
+                </div>
+
+                <div class="diamond-promo">
+                    <h3>Special Reward</h3>
+                    <a href="virtualbet.html" class="btn-diamond">
+                        <i class="fas fa-gem"></i> Get Free Diamonds
+                    </a>
+                </div>
+            </div>
+
+            <div class="cols cols1">
+                <div class="imgbox">
+                    <img src="sammyam.png" alt="HN Logo">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script>
+        // TYPEWRITER
+        new Typed(".multiText", {
+            strings: ["Hami Nepal", "Esport Team", "HN Guild", "Freefire Team"],
+            loop: true,
+            typeSpeed: 60,
+            backSpeed: 30,
+            backDelay: 1500
+        });
+
+        // MENU BUTTON LOGIC
+        function openMobileMenu() {
+            const check = document.getElementById("check");
+            if (window.innerWidth <= 900) {
+                check.checked = !check.checked;
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // MUSIC LOGIC
+        const audio = document.getElementById("guildMusic");
+        const icon = document.getElementById("music-icon");
+        let isPlaying = false;
+
+        const startMusic = () => {
+            if (!isPlaying) {
+                audio.play();
+                isPlaying = true;
+                icon.className = "fas fa-volume-up";
+                ['click', 'touchstart', 'scroll'].forEach(e => window.removeEventListener(e, startMusic));
+            }
+        };
+        ['click', 'touchstart', 'scroll'].forEach(e => window.addEventListener(e, startMusic));
+
+        function toggleMusic() {
+            if (audio.paused) { audio.play(); icon.className = "fas fa-volume-up"; } 
+            else { audio.pause(); icon.className = "fas fa-volume-mute"; }
+        }
+
+        // CURSOR LOGIC
+        const cursor = document.querySelector('#cursor');
+        const dot = document.querySelector('#cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, label').forEach(elem => {
+            elem.addEventListener('mouseenter', () => { 
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.8)'; 
+                cursor.style.borderColor = '#00a6ff'; 
+            });
+            elem.addEventListener('mouseleave', () => { 
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)'; 
+                cursor.style.borderColor = '#de1118'; 
+            });
+        });
+    </script>
+</body>
+</html>
